@@ -42,6 +42,7 @@ public class Grid<TGridObject>
                 Vector2 currentWorldPosition = GetWorldPosition(i, j);
                 string formattedString = $"({i}, {j})";
                 gridArray[i, j] = createGridObject(this, i, j);
+                
                 Helpers.CreateWorldText(
                                 null,
                                 formattedString,
@@ -51,6 +52,7 @@ public class Grid<TGridObject>
                                 TextAnchor.MiddleCenter,
                                 TextAlignment.Center,
                                 1);
+                
             }
         }
     }
