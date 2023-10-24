@@ -43,6 +43,7 @@ public class Grid<TGridObject>
                 string formattedString = $"({i}, {j})";
                 gridArray[i, j] = createGridObject(this, i, j);
                 
+                /*
                 Helpers.CreateWorldText(
                                 null,
                                 formattedString,
@@ -52,7 +53,7 @@ public class Grid<TGridObject>
                                 TextAnchor.MiddleCenter,
                                 TextAlignment.Center,
                                 1);
-                
+                */
             }
         }
     }
@@ -82,6 +83,13 @@ public class Grid<TGridObject>
     {
         x = Mathf.RoundToInt((worldPosition - originPosition).x / cellSize);
         y = Mathf.RoundToInt((worldPosition - originPosition).y / cellSize);
+    }
+
+    public Vector2 GetXY(Vector2 worldPosition)
+    {
+        int x = Mathf.RoundToInt((worldPosition - originPosition).x / cellSize);
+        int y = Mathf.RoundToInt((worldPosition - originPosition).y / cellSize);
+        return new Vector2(x, y);
     }
 
     public bool isTileWalkable(Vector2 currentWorldPosition)

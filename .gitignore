@@ -74,4 +74,7 @@ crashlytics-build.properties
 #/[Aa]ssets/[Ss]treamingAssets/aa.meta
 #/[Aa]ssets/[Ss]treamingAssets/aa/*
 /Assets/Ammonite Design Studios/
+/Assets/Materials/
+/Assets/Scenes/
+/Assets/Sprites/
 /Assets/Ammonite Design Studios.meta
