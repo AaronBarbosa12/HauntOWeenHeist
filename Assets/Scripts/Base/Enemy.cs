@@ -21,6 +21,10 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
     public bool IsAggroed { get; set; } = false;
     public bool IsWithinStrikingDistance { get; set; } = false;
 
+    #region Idle Variables
+    public GameObject BulletPrefab;
+
+    #endregion
     protected void Start()
     {
         RB = GetComponent<Rigidbody2D>();
