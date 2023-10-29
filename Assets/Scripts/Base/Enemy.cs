@@ -7,8 +7,8 @@ using UnityEngine;
 public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckable
 {
     [field: SerializeField] public float MaxHealth { get; set; } = 100f;
-    public float CurrentHealth { get; set ; }
-    public Rigidbody2D RB { get ; set ; }
+    public float CurrentHealth { get; set; }
+    public Rigidbody2D RB { get; set; }
     public bool IsFacingRight { get; set; } = false;
 
     #region State Machine Variables
@@ -25,17 +25,38 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
     public GameObject BulletPrefab;
 
     #endregion
-    protected void Start()
+
+    #region ScriptableObject Variables
+    [SerializeField] private EnemyIdleSOBase enemyIdleBase;
+    [SerializeField] private EnemyChaseSOBase enemyChaseBase;
+    [SerializeField] private EnemyAttackSOBase enemyAttackBase;
+
+    public EnemyIdleSOBase EnemyIdleBaseInstance {get; set; }
+    public EnemyChaseSOBase EnemyChaseBaseInstance { get; set; }
+    public EnemyAttackSOBase EnemyAttackBaseInstance { get; set; }  
+    #endregion
+
+
+    protected void Awake()
     {
-        RB = GetComponent<Rigidbody2D>();
-
-
-        CurrentHealth = MaxHealth;
+        EnemyIdleBaseInstance = Instantiate(enemyIdleBase);
+        EnemyChaseBaseInstance = Instantiate(enemyChaseBase);
+        EnemyAttackBaseInstance = Instantiate(enemyAttackBase);
 
         StateMachine = new EnemyStateMachine();
         IdleState = new EnemyIdleState(this, StateMachine);
-        ChaseState = new EnemyChaseState(this, StateMachine);
-        AttackState = new EnemyAttackState(this, StateMachine);
+        //ChaseState = new EnemyChaseState(this, StateMachine);
+        //AttackState = new EnemyAttackState(this, StateMachine);
+
+    }
+    public void Start()
+    {
+        RB = GetComponent<Rigidbody2D>();
+        CurrentHealth = MaxHealth;
+
+        EnemyIdleBaseInstance.Initialize(gameObject, this);
+        //EnemyChaseBaseInstance.Initialize(gameObject, this);
+        //EnemyAttackBaseInstance.Initialize(gameObject, this);
 
         StateMachine.Initialize(IdleState);
     }
@@ -54,7 +75,6 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
     {
 
     }
-
     public void MoveEnemy(Vector2 velocity)
     {
         RB.velocity = velocity;
@@ -72,13 +92,11 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
             Die();
         }
     }
-
     public void Die()
     {
         throw new System.NotImplementedException();
     }
     #endregion
-
     #region Distance Checks
     public void SetAggroStatus(bool isAggroed)
     {
@@ -95,7 +113,6 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
     private void AnimationTriggerEven(AnimationTriggerType triggerType) {
         StateMachine.CurrentEnemyState.AnimationTriggerEvent(triggerType);
     }
-
     public enum AnimationTriggerType
     {
         EnemyDamaged,
